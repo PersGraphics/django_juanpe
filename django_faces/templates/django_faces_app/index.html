@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INDEX</title>
+</head>
+<body>
+    <span>Hola</span>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %} 
+        {{ form }}
+        <input class="submit" type="submit" value="Upload" />
+      </form>
+      <button>
+        <a href="{% url 'panel_imagenes' %}">">
+        </button> 
+</body>
+</html>
