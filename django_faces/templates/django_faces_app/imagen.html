@@ -7,20 +7,106 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- JCROP IMPORTACIÓN-->
     <link rel="stylesheet" href="https://unpkg.com/jcrop/dist/jcrop.css"/>
     <script src="https://unpkg.com/jcrop"></script>
-    <title>Document</title>
+    <title>Imagen</title>
+    <style>
+      body {
+        padding-top: 5%;
+        font-family: Arial, sans-serif;
+      }
+      #target {
+          width: auto;
+          height: auto;
+      }
+      #blur {
+          display: inline-block;
+          margin-top: 20px;
+          background-color: #fff;
+          border: 2px solid #4CAF50;
+          border-radius: 4px;
+          color: #4CAF50;
+          font-size: 20px;
+          font-weight: bold;
+          text-decoration: none;
+          transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      #blur:hover {
+          background-color: #4CAF50;
+          color: #fff;
+          cursor:pointer;
+      }
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .col-md-4 {
+        flex: 0 0 95.33%;
+        max-width: 95.33%;
+        padding: 0 15px;
+      }
+
+      .thumbnail {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 1px solid #dddddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin: 10px;
+        padding: 10px;
+        transition: transform 0.2s ease;
+      }
+      p{
+        padding: 0px 15px 0px 15px;
+      }
+      h1{
+        margin-top:-40px
+      }
+      .button-back {
+        display: inline-block;
+        margin-top: 5px;
+        padding: 10px 20px;
+        background-color: #fff;
+        border: 2px solid #4CAF50;
+        border-radius: 4px;
+        color: #4CAF50;
+        font-size: 20px;
+        font-weight: bold;
+        text-decoration: none;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .button-back:hover{
+        background-color: #4CAF50;
+        color: #fff;
+    }
+    </style>
 </head>
+
 <body>
-    {% if imagen.archivoBlur %}
-      <img src="{{ imagen.archivoBlur.url }}" />
-      <br>
-      <br>
-    {% endif %}
-      <img src="{{ imagen.archivo.url }}" id="target" />
-      <br />
-    <button id="blur">
-        BLUR
-    </button>
+  <div class="row">
+    <h1>CONTROL DE IMAGEN {{ imagen.id }}</h1>
+  </div>
+  <div class="row">
+    <a class="button-back" href="{% url 'panel_imagenes' %}">&lt;- Volver al panel de imagenes</a>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="thumbnail">
+        {% if imagen.archivoBlur %}
+          <img src="{{ imagen.archivoBlur.url }}" />
+            <p>IMAGEN BLUR</p>
+          <br>
+        {% endif %}
+          <img src="{{ imagen.archivo.url }}" id="target" />
+          <p>IMAGEN NORMAL</p>
+        <button id="blur" class="button-back">
+            <p>BLUR</p>
+        </button>
+      </div>
+    </div>
+  </div>
 </body>
+
 <script defer>
     const jcrop = Jcrop.attach("target", {
         multi: true, /* VARIOS RECORTES */
@@ -44,7 +130,7 @@
         jcrop.newWidget(Jcrop.Rect.create(left, top, width, height), {});
     }
     }
-
+    
     processImage();
 
     const send = async (coords) => {
@@ -61,15 +147,12 @@
       };
       return fetch(`/blur/${id}`, options)
   }
-
-
     $("#blur").click(async () => {
       let crops = jcrop.crops;
       const coords = []
       crops.forEach((crop) => {
         coords.push({x: crop.pos.x, y: crop.pos.y, w: crop.pos.w, h: crop.pos.h})
       });
-      /*console.log(coords);*/
       await send(coords);
       window.location.reload();
     });

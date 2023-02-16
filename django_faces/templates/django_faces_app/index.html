@@ -9,6 +9,7 @@
         body {
             background-color: #f8f8f8;
             font-family: Arial, sans-serif;
+            padding-top: 3%;
         }
         #container {
             text-align: center;
@@ -17,7 +18,7 @@
         h1 {
             font-size: 36px;
             margin-top: 40px;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
         form {
             text-align: center;
@@ -74,6 +75,11 @@
             <input class="submit" type="submit" value="Cargar imagen" />
         </form>
         <a id="panel-button" href="{% url 'panel_imagenes' %}">Ver panel de imágenes</a>
+        <p style="margin-top:50px"><b>NOTA IMPORTANTE:</b></p>
+        <p>Hay veces, que dado el propio navegador, no funciona el blur y hay que hacer control+F5 para reiniicar la pagina eliminando la cache para que funcione correctamente</p>
+         <p>Hemos dejado la imagen 4 sin blurear para que se vea que se puede hacer sin problema</p>
+        <p>A imagenes ya blureadas, se sobreescribe el blur</p>
+        
     </div>
 </body>
 </html>

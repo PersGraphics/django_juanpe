@@ -7,17 +7,13 @@
     <title>Panel de imagenes</title>
     <style>
         body {
-            padding-top: 5%;
+            padding-top: 3%;
+            font-family: Arial, sans-serif;
         }
         .row {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-        }
-        .thumbnail {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
         .thumbnail a {
             display: flex;
@@ -25,50 +21,100 @@
             align-items: center;
             text-decoration: none;
         }
+        .thumbnail {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            padding: 10px;
+            transition: transform 0.2s ease;
+          }
+        
+        .thumbnail:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+        .caption {
+        margin-top: 6px;
+        margin-bottom: 6px;
+        }
         .thumbnail img {
-            width: 500px;
+            width: 550px;
             height: auto;
+            margin-top:8px;
         }
         .caption p {
-            font-size: 24px;
-            margin-top: 16px;
+            font-size: 28px;
+            
         }
         .button-back {
             display: inline-block;
-            background-color: #0046c8;
-            color: #ffffff;
-            border-radius: 8px;
-            padding: 12px 24px;
+            margin-top: 5px;
+            padding: 10px 20px;
+            background-color: #fff;
+            border: 2px solid #4CAF50;
+            border-radius: 4px;
+            color: #4CAF50;
             font-size: 20px;
-            text-align: center;
+            font-weight: bold;
             text-decoration: none;
-            margin-top: 16px;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
+        .button-back:hover{
+            background-color: #4CAF50;
+            color: #fff;
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .col-md-4 {
+            flex: 0 0 33.33%;
+            max-width: 33.33%;
+            padding: 0 15px;
+        }
+        h1 {
+            font-size: 46px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        
     </style>
 </head>
 <body>
     <div class="container">
         <div class="row">
-            <a class="button-back" href="{% url 'index' %}">&lt; Volver al inicio</a>
+            <h1>PANEL DE IMAGENES</h1>
+        </div>
+        <div class="row">
+            <a class="button-back" href="{% url 'index' %}">&lt;- Volver al inicio</a>
         </div>
         <br>
-        {% for imagen in imagenes %}
         <div class="row">
+            {% for imagen in imagenes %}
             <div class="col-md-4">
                 <div class="thumbnail">
                     <a href="../imagen/{{ imagen.id }}">
+                        <div class="caption">
+                            <p>La imagen número <b>{{ imagen.id }}</b></p>
+                        </div>
+                        <img src="{{ imagen.archivo.url }}" alt="img">
+                        <p>IMAGEN NORMAL</p>
                         {% if imagen.archivoBlur %}
                         <img src="{{ imagen.archivoBlur.url }}" alt="img">
+                        <p>IMAGEN BLUR</p>
                         {% endif %}
-                        <img src="{{ imagen.archivo.url }}" alt="img">
-                        <div class="caption">
-                            <p>{{ imagen.id }}</p>
-                        </div>
                     </a>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
+    
 </body>
 </html>
