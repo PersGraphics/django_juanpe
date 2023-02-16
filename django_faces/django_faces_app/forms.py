@@ -4,4 +4,4 @@ from .models import Imagenes
 class Formulario(forms.ModelForm):
     class Meta:
         model = Imagenes
-        fields = ['file']
+        fields = ['archivo']

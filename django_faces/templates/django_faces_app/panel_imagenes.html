@@ -5,33 +5,70 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de imagenes</title>
+    <style>
+        body {
+            padding-top: 5%;
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .thumbnail {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .thumbnail a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+        }
+        .thumbnail img {
+            width: 500px;
+            height: auto;
+        }
+        .caption p {
+            font-size: 24px;
+            margin-top: 16px;
+        }
+        .button-back {
+            display: inline-block;
+            background-color: #0046c8;
+            color: #ffffff;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 20px;
+            text-align: center;
+            text-decoration: none;
+            margin-top: 16px;
+        }
+    </style>
 </head>
 <body>
-    <body class="container " style="padding-top: 5%;">
+    <div class="container">
         <div class="row">
-          <a href="{% url 'index' %}"> < < Go back</a>
-          <br>
-          <br>
-          <br>
-            {% for imagen in imagenes %}
+            <a class="button-back" href="{% url 'index' %}">&lt; Volver al inicio</a>
+        </div>
+        <br>
+        {% for imagen in imagenes %}
+        <div class="row">
             <div class="col-md-4">
-              <div class="thumbnail">
-                <a href="../imagen/{{ imagen.id }}">
-                  <!-- {% if imagen.bluredfile %}
-                    <img src="{{ imagen.bluredfile.url }}" alt="img" style="width:100%">
-                  {% else %}
-                    
-                  {% endif %}-->
-                  <img src="{{ imagen.file.url }}" alt="img" style="width:300px">
-                  <div class="caption">
-                    <p>{{ imagen.id }}</p>
-                  </div>
-                </a>
-              </div>
+                <div class="thumbnail">
+                    <a href="../imagen/{{ imagen.id }}">
+                        {% if imagen.archivoBlur %}
+                        <img src="{{ imagen.archivoBlur.url }}" alt="img">
+                        {% endif %}
+                        <img src="{{ imagen.archivo.url }}" alt="img">
+                        <div class="caption">
+                            <p>{{ imagen.id }}</p>
+                        </div>
+                    </a>
+                </div>
             </div>
-            {% endfor %}
-          </div>
-      </body>
-               
+        </div>
+        {% endfor %}
+    </div>
 </body>
 </html>

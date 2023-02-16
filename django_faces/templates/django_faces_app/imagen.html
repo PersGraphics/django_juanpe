@@ -10,12 +10,12 @@
     <title>Document</title>
 </head>
 <body>
-    {% if imagen.bluredfile %}
-      <img src="{{ imagen.bluredfile.url }}" />
+    {% if imagen.archivoBlur %}
+      <img src="{{ imagen.archivoBlur.url }}" />
       <br>
       <br>
     {% endif %}
-      <img src="{{ imagen.file.url }}" id="target" />
+      <img src="{{ imagen.archivo.url }}" id="target" />
       <br />
     <button id="blur">
         BLUR
