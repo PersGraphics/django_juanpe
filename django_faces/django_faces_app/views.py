@@ -34,7 +34,7 @@ def imagen(request, id):
     imagen = Imagenes.objects.get(id=id)
     return render(request, 'django_faces_app/imagen.html', {'imagen': imagen})
 
-def aws(request):
+def aws(request, id):
     pic = Imagenes.objects.get(id = id)
     session = boto3.Session(region_name='us-west-2')
     rekognition = session.client('rekognition')
@@ -46,3 +46,38 @@ def aws(request):
     filtered_faces = filter(lambda face: face["AgeRange"]["Low"] < 18, response['FaceDetails'])
     filtered_faces = list(map(lambda face: face['BoundingBox'], filtered_faces))
     return JsonResponse(filtered_faces, safe = False)
+
+def blur(request, id):
+    image = Imagenes.objects.get(id = id)
+    path = image.file.path
+    # print('IMAGE.FILE.PATH -------------------- ', image.bluredfile.path)
+    #print('IMAGE.FILE.URL -------------------- ', image.file.url)
+    csrf_token = get_token(request)
+    img = Image.open(path)
+    print(path)
+    body = json.loads(request.body)
+    
+    coords = body.get('coords')
+    print('COORDENADAS  -------------------- ', coords)
+    
+    for coord in coords:
+        x = int(coord['x'])
+        y = int(coord['y'])
+        w = int(coord['w'])
+        h = int(coord['h'])
+        region = img.crop((x, y, x + w, y + h))
+        
+        for i in range(0, 40):
+            region = region.filter(ImageFilter.BLUR)
+        img.paste(region, (x, y, x + w, y + h))
+    #print('IMAGE.FILE.PATH -------------------- ', path)
+    extension = os.path.splitext(path)[1]
+    len_extension = len(extension)
+
+    path = path[:-len_extension] + '-blured' + path[-len_extension:]
+    img.save(path)
+    image.bluredfile = ImageFieldFile(image, image.bluredfile, path) 
+    image.save()
+    #print('------------------------------------------- SAVED')
+
+    return render(request, 'django_faces_app/imagen.html', {'imagen': image, 'csrf_token': csrf_token})

@@ -10,7 +10,13 @@
     <title>Document</title>
 </head>
 <body>
-    <img id="target" src="{{ imagen.file.url }}" alt="img" style="width:300px">
+    {% if imagen.bluredfile %}
+      <img src="{{ imagen.bluredfile.url }}" />
+      <br>
+      <br>
+    {% endif %}
+      <img src="{{ imagen.file.url }}" id="target" />
+      <br />
     <button id="blur">
         BLUR
     </button>
@@ -18,7 +24,55 @@
 <script defer>
     const jcrop = Jcrop.attach("target", {
         multi: true, /* VARIOS RECORTES */
-      });
+    });
+    
+    const getPicInfo = async (id) => {
+        return fetch(`/aws_imagen/${id}`)
+          .then((res) => res.json())
+          .then((data) => data);
+      }
+    const processImage = async () => {
+    info = await getPicInfo('{{ imagen.id }}')
 
+    const img = document.getElementById('target')
+    for (x of info) {
+        const width = x.Width * img.width;
+        const left = x.Left * img.width;
+        const top = x.Top * img.height;
+        const height = x.Height * img.height;
+        console.log(width, height, left, top)
+        jcrop.newWidget(Jcrop.Rect.create(left, top, width, height), {});
+    }
+    }
+
+    processImage();
+
+    const send = async (coords) => {
+      const id = '{{ imagen.id }}';
+      const csrf_token = "{{ csrf_token }}"
+      
+      const options = {
+          method: 'POST',
+          body: JSON.stringify({ coords }),
+          headers: {
+              'X-CSRFToken': csrf_token,
+              'Content-Type': 'application/json'
+          }
+      };
+      return fetch(`/blur/${id}`, options)
+  }
+
+
+    $("#blur").click(async () => {
+      let crops = jcrop.crops;
+      const coords = []
+      crops.forEach((crop) => {
+        coords.push({x: crop.pos.x, y: crop.pos.y, w: crop.pos.w, h: crop.pos.h})
+      });
+      /*console.log(coords);*/
+      await send(coords);
+      window.location.reload();
+    });
+ 
 </script>
 </html>

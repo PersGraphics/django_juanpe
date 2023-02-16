@@ -25,5 +25,8 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('imagenes/', views.panel_imagenes, name='panel_imagenes'),
     path('imagen/<int:id>', views.imagen, name='imagen'),
+    path('aws_imagen/<int:id>', views.aws, name='aws'),
+    path('blur/<int:id>', views.blur, name='blur'),
+
     #path('', views.index, name='index'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # Necesario para mostrar las imagenes (puesto en settings)
